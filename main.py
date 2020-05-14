@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication
 
 from gui import Gui
 
-# auteur : Baudouin Dafflon
+# auteur : Baudouin Dafflon 2
 '''
 Question 1: Changer le titre de la fenetre
 Question 2: Changer la taille minimale de la fenetre (1280x720)
