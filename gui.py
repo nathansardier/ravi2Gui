@@ -1,10 +1,9 @@
+import json
 import sys
 
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, qApp, QWidget, QVBoxLayout, QTabWidget, QPushButton, \
-    QInputDialog, QLineEdit, QHBoxLayout, QHeaderView
-from PyQt5.QtWidgets import QTableWidget,QTableWidgetItem
-from PyQt5.uic.properties import QtGui
+    QInputDialog, QLineEdit, QTableWidget, QTableWidgetItem, QHBoxLayout
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -91,42 +90,57 @@ class MyTableWidget(QWidget):
 
         self.tab1.layout.addWidget(openButton)
         self.tab1.setLayout(self.tab1.layout)
+
+
+        #Tab 2:
+        self.tableWidget = QTableWidget()
+        self.tableWidget.setRowCount(6)
+        self.tableWidget.setColumnCount(2)
+
+        self.tab2.layout = QHBoxLayout(self)
+        self.tab2.layout.addWidget(self.tableWidget)
         self.tab1.setStyleSheet(_fromUtf8("background-image: url(./download.png); background-attachment: fixed"))
 
-        # Left
-        self.table = QTableWidget()
-        self.table.setColumnCount(2)
-        self.table.setRowCount(6)
-        self.table.setItem(0, 0, QTableWidgetItem("Nom"))
-        self.table.setItem(1, 0, QTableWidgetItem("Prénom"))
-        self.table.setItem(2, 0, QTableWidgetItem("Date de naissance"))
-        self.table.setItem(3, 0, QTableWidgetItem("Sexe"))
-        self.table.setItem(4, 0, QTableWidgetItem("Taille"))
-        self.table.setItem(5, 0, QTableWidgetItem("Poids"))
+#(nom, prenom, date de naissance, sexe, taille, poid)
+        self.tableWidget.setItem(0, 0, QTableWidgetItem("nom ?"))
+        self.tableWidget.setItem(1, 0, QTableWidgetItem("Prenom ?"))
+        self.tableWidget.setItem(2, 0, QTableWidgetItem("Date de naissance ?"))
+        self.tableWidget.setItem(3, 0, QTableWidgetItem("Sexe ?"))
+        self.tableWidget.setItem(4, 0, QTableWidgetItem("Taille ?"))
+        self.tableWidget.setItem(5, 0, QTableWidgetItem("Poid ?"))
 
-        # QWidget Layout
-        self.tab2.layout = QVBoxLayout()
-
-        #self.table_view.setSizePolicy(size)
-        self.tab2.layout.addWidget(self.table)
-
-        # Set the layout to the QWidget
-        self.tab2.setLayout(self.tab2.layout)
-
-        saveButton = QPushButton("Sauvegarder")
-        saveButton.clicked.connect(self.save)
-
+        saveButton = QPushButton("Sauvegarde ?")
+        saveButton.clicked.connect(self.saveClick)
         self.tab2.layout.addWidget(saveButton)
 
+        self.tab2.setLayout(self.tab2.layout)
 
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
 
+    def saveClick(self):
+        print("save")
+        dictionnaire = {}
+
+        if self.tableWidget.item(0,1):
+            dictionnaire["nom"] = self.tableWidget.item(0,1).text()
+        if self.tableWidget.item(1, 1):
+            dictionnaire["Prenom"] = self.tableWidget.item(1, 1).text()
+        if self.tableWidget.item(2, 1):
+            dictionnaire["Date"] = self.tableWidget.item(2, 1).text()
+        if self.tableWidget.item(3, 1):
+            dictionnaire["Sexe"] = self.tableWidget.item(3, 1).text()
+        if self.tableWidget.item(4, 1):
+            dictionnaire["Taille"] = self.tableWidget.item(4, 1).text()
+        if self.tableWidget.item(5, 1):
+            dictionnaire["Poids"] = self.tableWidget.item(5, 1).text()
+
+        print(dictionnaire)
+        with open('data.json', 'w') as file:
+            json.dump(dictionnaire, file)
+
     def openClick(self):
         print("click")
         nom,type = QInputDialog.getText(self,"input dialog","Votre Nom ?",QLineEdit.Normal,"")
         print(nom)
-
-    def save(self):
-        print("Save")
